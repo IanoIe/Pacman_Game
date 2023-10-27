@@ -31,16 +31,16 @@ class Player {
         c.beginPath()
         c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         c.fillStyle = 'yellow'
+        c.fill()
         c.closePath()
     }
+
+    update() {
+        this.draw()
+        this.position.x += this.velocity.x
+        this.position.y += this.velocity.y
+    }
 }
-const map = [
-    ['-', '-', '-', '-', '-', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', '-'],
-    ['-', '-', '-', '-', '-', '-']
-]
 
 const boundaries = []
 const player = new Player({
@@ -53,6 +53,29 @@ const player = new Player({
         y: 0
     }
 })
+
+const keys = {
+    w: {
+        pressed: false
+    },
+    a: {
+        pressed: false
+    },
+    s: {
+        pressed: false
+    },
+    d: {
+        pressed: false
+    }
+}
+
+const map = [
+    ['-', '-', '-', '-', '-', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', '-'],
+    ['-', '-', '-', '-', '-', '-']
+]
 
 map.forEach((rows, i) => {
     rows.forEach((symbol, j) => {
@@ -71,8 +94,58 @@ map.forEach((rows, i) => {
     })
 })
 
-boundaries.forEach((boundary) => {
-    boundary.draw()
+function animate() {
+    requestAnimationFrame(animate)
+    c.clearRect(0, 0, canvas.width, canvas.height)
+    boundaries.forEach((boundary) => {
+        boundary.draw()
+    })
+    player.update()
+    player.velocity.y = 0
+
+    if (keys.w.pressed) {
+        player.velocity.y = -5
+    } else if (keys.a.pressed) {
+        player.velocity.x = -5
+    } else if (keys.s.pressed) {
+        player.velocity.y = 5
+    }
+}
+
+animate()
+
+
+window.addEventListener('keydown', ({ key }) => {
+    switch (key) {
+        case 'w':
+            keys.w.pressed = true
+            break
+        case 'a':
+            keys.a.pressed = true
+            break
+        case 's':
+            keys.s.pressed = true
+            break
+        case 'd':
+            keys.d.pressed = true
+            break
+    }
 })
 
-player.draw();
+window.addEventListener('keyup', ({ key }) => {
+    switch (key) {
+        case 'w':
+            keys.w.pressed = false
+            break
+        case 'a':
+            keys.a.pressed = false
+            break
+        case 's':
+            keys.s.pressed = false
+            break
+        case 'd':
+            keys.d.pressed = false
+            break
+    }
+    console.log(player.velocity)
+})
