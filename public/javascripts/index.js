@@ -41,13 +41,8 @@ class Player {
         c.rotate(this.rotation)
         c.translate(-this.position.x, -this.position.y)
         c.beginPath()
-        c.arc(this.position.x, 
-            this.position.y, 
-            this.radius, 
-            this.radians, 
-            Math.PI * 2 - this.radians)
-        c.lineTo(this.position.x, 
-                 this.position.y)
+        c.arc(this.position.x, this.position.y, this.radius, this.radians, Math.PI * 2 - this.radians)
+        c.lineTo(this.position.x, this.position.y)
         c.fillStyle = 'yellow'
         c.fill()
         c.closePath()
@@ -59,9 +54,7 @@ class Player {
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
 
-        if (this.radians < 0 || this.radians > 0.75) this.openRate 
-        = -this.openRate
-
+        if (this.radians < 0 || this.radians > 0.75) this.openRate = -this.openRate
         this.radians += this.openRate
     }
 }
@@ -80,8 +73,7 @@ class Ghost {
 
     draw() {
         c.beginPath()
-        c.arc(this.position.x, this.position.y, this.radius, 0, 
-            Math.PI * 2)
+        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         c.fillStyle = this.scared ? 'blues' : this.color
         c.fill()
         c.closePath()
@@ -102,8 +94,7 @@ class Pellet {
 
     draw() {
         c.beginPath()
-        c.arc(this.position.x, this.position.y, this.radius, 0,
-            Math.PI * 2)
+        c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2)
         c.fillStyle = 'white'
         c.fill()
         c.closePath()
@@ -426,12 +417,10 @@ let animationId
 function animate() {
     animationId = requestAnimationFrame(animate)
     c.clearRect(0, 0, canvas.width, canvas.height)
-
     if (keys.w.pressed && lastKey === 'w') {
         for (let i = 0; i < boundaries.length; i++){
             const boundary = boundaries[i]
-            if (
-                circleCollidesWithRectangle({
+            if (circleCollidesWithRectangle({
                     circle: {
                         ...player,
                         velocity: {
@@ -452,8 +441,7 @@ function animate() {
     } else if (keys.a.pressed && lastKey === 'a') {
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i]
-            if (
-                circleCollidesWithRectangle({
+            if (circleCollidesWithRectangle({
                     circle: {
                         ...player,
                         velocity: {
@@ -471,8 +459,7 @@ function animate() {
     } else if (keys.s.pressed && lastKey === 's') {
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i]
-            if (
-                circleCollidesWithRectangle({
+            if (circleCollidesWithRectangle({
                     circle: {
                         ...player,
                         velocity: {
@@ -493,8 +480,7 @@ function animate() {
     } else if (keys.d.pressed && lastKey === 'd') {
         for (let i = 0; i < boundaries.length; i++) {
             const boundary = boundaries[i]
-            if (
-                circleCollidesWithRectangle({
+            if (circleCollidesWithRectangle({
                     circle: {
                         ...player,
                         velocity: {
@@ -513,16 +499,12 @@ function animate() {
         }
     }
 
-
 // detect collision between ghosts and player 
 for (let i = ghosts.length - 1; 0 <= i; i--) {
     const ghost = ghosts[i]
     // ghost touches player
     if (
-        Math.hypot(
-            ghost.position.x - player.position.x,
-            ghost.position.y - player.position.y
-        ) < 
+        Math.hypot(ghost.position.x - player.position.x, ghost.position.y - player.position.y) < 
             ghost.radius + player.radius
     )  {
         if (ghost.scared) {
@@ -544,24 +526,20 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
         PowerUp.draw()
 
         // player collides with powerup 
-        if (
-            Math.hypot(
-                PowerUp.position.x - player.position.x,
-                PowerUp.position.y - player.position.y
-            ) <
-            PowerUp.radius + player.radius
-        ) {
-            PowerUps.splice(i, 1)
+        if (Math.hypot(PowerUp.position.x - player.position.x, PowerUp.position.y - player.position.y
+            ) < PowerUp.radius + player.radius
+            ) {
+                PowerUps.splice(i, 1)
 
-            // make ghosts scared
-            ghosts.forEach(ghost => {
-                ghost.scared = true
+                // make ghosts scared
+                ghosts.forEach(ghost => {
+                     ghost.scared = true
 
-                setTimeout(() => {
-                    ghost.scared = false
-                }, 5000)
-            })
-        }
+                     setTimeout(() => {
+                        ghost.scared = false
+                     }, 5000)
+                })
+            }
     }
 
     // Touch pellets here
@@ -569,12 +547,10 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
         const pellet = pellets[i]
         pellet.draw()
 
-        if (
-            Math.hypot(
+        if (Math.hypot(
                 pellet.position.x - player.position.x,
                 pellet.position.y - player.position.y
-            ) <
-            pellet.radius + player.radius
+            ) < pellet.radius + player.radius
         ) {
             pellets.splice(i, 1)
             score += 10
@@ -585,8 +561,7 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
     boundaries.forEach((boundary) => {
         boundary.draw()
 
-        if (
-            circleCollidesWithRectangle({
+        if (circleCollidesWithRectangle({
                 circle: player,
                 rectangle: boundary
             })
@@ -596,17 +571,11 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
         }
     })
     player.update()
-    
     ghosts.forEach(ghost => {
         ghost.update()
-
-        
-
         const collisions = []
         boundaries.forEach(boundary => {
-            if (
-                !collisions.includes('right') &&
-                circleCollidesWithRectangle({
+            if (!collisions.includes('right') && circleCollidesWithRectangle({
                     circle: {
                         ...ghost,
                         velocity: {
@@ -620,9 +589,7 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
                 collisions.push('right')
             }
 
-            if (
-                !collisions.includes('left') &&
-                circleCollidesWithRectangle({
+            if (!collisions.includes('left') && circleCollidesWithRectangle({
                     circle: {
                         ...ghost,
                         velocity: {
@@ -636,9 +603,7 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
                 collisions.push('left')
             }
 
-            if (
-                !collisions.includes('up') &&
-                circleCollidesWithRectangle({
+            if (!collisions.includes('up') && circleCollidesWithRectangle({
                     circle: {
                         ...ghost,
                         velocity: {
@@ -652,9 +617,7 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
                 collisions.push('up')
             }
             
-            if (
-                !collisions.includes('down') &&
-                circleCollidesWithRectangle({
+            if (!collisions.includes('down') && circleCollidesWithRectangle({
                     circle: {
                         ...ghost,
                         velocity: {
@@ -729,8 +692,6 @@ for (let i = ghosts.length - 1; 0 <= i; i--) {
 } // end of animate()
   
 
-animate()
-
 
 window.addEventListener('keydown', ({ key }) => {
     switch (key) {
@@ -770,3 +731,7 @@ window.addEventListener('keyup', ({ key }) => {
     }
     console.log(player.velocity)
 })
+
+
+
+animate()
